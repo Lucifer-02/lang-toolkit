@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <uchar.h>
 #include <unistd.h>
 
 #include <curl/curl.h>
@@ -188,10 +189,10 @@ Text tok(char *text, int len, int limit) {
   int end = 0;
   int pos = 0;
 
-  printf("Origin:\n");
-  fwrite(text, 1, len, stdout);
+  // printf("Origin:\n");
+  // fwrite(text, 1, len, stdout);
   // // printf("\nlen: %d\nEnd\n", len);
-  printf("\n");
+  // printf("\n");
 
   if (len <= limit) {
     return (Text){.data = text, .size = len};
@@ -260,22 +261,6 @@ int main() {
       "hội thú vị để dân chủ hóa khả năng tiếp cận các dự đoán chính xác và "
       "giảm bớt sự không chắc chắn bằng cách tận dụng khả năng của những tiến "
       "bộ hiện đại trong học sâu.";
-
-  // "Bạn có khỏe không? Tên bạn là gì?";
-  // "ASCII là viết tắt của Mã tiêu chuẩn Mỹ để trao đổi thông tin. Máy tính "
-  // "chỉ có thể hiểu được các con số, vì vậy mã ASCII là sự biểu diễn bằng "
-  // "số của một ký tự như 'a' hoặc '@' hoặc một hành động nào đó. ASCII đã "
-  // "được phát triển từ lâu và hiện nay các ký tự không in được hiếm khi "
-  // "được sử dụng cho mục đích ban đầu của chúng. Dưới đây là bảng ký tự "
-  // "ASCII và bảng này bao gồm các mô tả về 32 ký tự không in được đầu tiên. "
-  // "ASCII thực sự được thiết kế để sử dụng với teletypes và do đó các mô tả "
-  // "có phần mơ hồ. Tuy nhiên, nếu ai đó nói rằng họ muốn CV của bạn ở định "
-  // "dạng ASCII, tất cả điều này có nghĩa là họ muốn văn bản 'thuần túy' "
-  // "không có định dạng như tab, in đậm hoặc gạch dưới - định dạng thô mà "
-  // "bất kỳ máy tính nào cũng có thể hiểu được. Điều này thường là để họ có "
-  // "thể dễ dàng nhập tệp vào ứng dụng của riêng mình mà không gặp vấn đề "
-  // "gì. Notepad.exe tạo văn bản ASCII hoặc trong MS Word bạn có thể lưu tệp "
-  // "dưới dạng 'chỉ văn bản'";
 
   // "how old are you?. What's your name?. Do you love me?. Let's go.";
   // "This line is a giveaway: you have named your script json. but "
