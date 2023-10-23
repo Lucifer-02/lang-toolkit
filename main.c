@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <argp.h>
 
 #include "lib/common.h"
 #include "lib/trans.h"
 #include "lib/tts.h"
 
 void trans(char *translation, char text[]) {
-  assert(strlen(text) < TRANS_BUFFER_SIZE);
+  assert(strlen(text) < TRANS_BUFFER_SIZE); //@require enough memory
 
   char url[TRANS_BUFFER_SIZE];
   const Text source = {.data = text, .size = strlen(text)};
@@ -31,7 +32,6 @@ void trans(char *translation, char text[]) {
 
 void tts(char *text, float speed) {
   assert(text != NULL);
-
   int text_len = strlen(text);
   assert(text_len < TTS_BUFFER_SIZE);
   assert(text_len != 0);
