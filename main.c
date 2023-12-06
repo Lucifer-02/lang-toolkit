@@ -1,8 +1,8 @@
+#include <argp.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <argp.h>
 
 #include "lib/common.h"
 #include "lib/trans.h"
