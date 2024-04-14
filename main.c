@@ -180,6 +180,7 @@ int main(int argc, char *argv[]) {
   // printf("Translation: %s\n", translation);
   MemAudioData audio = fast_tts(argv[1], TEXT_LIMIT);
   // MemAudioData audio = tts(argv[1], 250);
-  play_audio(audio, SPEED);
+  // play_audio(audio, SPEED);
+  printf("Audio size: %d\n", audio.size);
   return 0;
 }
