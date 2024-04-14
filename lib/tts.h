@@ -5,7 +5,10 @@
 
 #include <vlc/vlc.h>
 
-#define TTS_BUFFER_SIZE 1048576 // 1Mb
+#define TOTAL_AUDIO_BUFFER_SIZE 1048576 // 1Mb
+#define CHUNK_AUDIO_BUFFER_SIZE 65536   // 65Kb
+#define TOTAL_TEXT_BUFFER_SIZE 32768    // 33Kb
+#define CHUNK_TEXT_BUFFER_SIZE 1024     // 1Kb
 
 typedef struct {
   char *client;
@@ -19,7 +22,12 @@ typedef struct {
   size_t pos; // for callback
 } MemAudioData;
 
-void genarate_tts_url(char *url, const TTSParams params, Text text);
+typedef struct {
+  const char *url;
+  Slice response;
+} thread_data_t;
+
+void genarate_tts_url(char *url, const TTSParams params, Slice text);
 void play_audio(MemAudioData mem, float speed);
 
 #endif

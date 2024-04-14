@@ -1,8 +1,11 @@
 CC = gcc 
 WARNING += -Wall -Wextra 
 # WARNING += -Wcast-qual -Wcast-align -Wstrict-aliasing -Wpointer-arith -Winit-self -Wshadow -Wswitch-enum -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wfloat-equal -Wundef -Wvla -Wc++-compat
+TEXT = "VBA, or Visual Basic for Applications in short, is a Microsoft computer programming language which is used to facilitate automation of repetitive Microsoft suite data-processing functions, like generating custom graphs and reports. In this instance, VBA can also be used to automate the process of slides creation in PowerPoint using ChatGPT, an AI that can understand and process both human language and codes."
+# TEXT = "hi"
 
-LINKLIBS +=	-lvlc -ljansson -lcurl
+
+LINKLIBS +=	-lvlc -ljansson -lcurl -lpthread
 INCLUDED +=	./lib/tts.c ./lib/trans.c ./lib/common.c
 
 SOURCE = main
@@ -10,15 +13,13 @@ SOURCE_CODE = $(SOURCE).c
 OUTPFILE += $(SOURCE)
 
 clean:
-	clear
 	rm main
 
 debug:
 	$(CC) -g $(SOURCE_CODE) $(INCLUDED) -o $(OUTPFILE) $(LINKLIBS) $(WARNING)
 
 release:
-	$(CC) -O2 $(SOURCE_CODE) $(INCLUDED) -o $(OUTPFILE) $(LINKLIBS) -DNDEBUG
+	$(CC) -O3 $(SOURCE_CODE) $(INCLUDED) -o $(OUTPFILE) $(LINKLIBS) -DNDEBUG
 
-run: debug
-	clear
-	./main "In this paper, we introduce TimeGPT, the first foundation model for time series, capable of generating accurate predictions for diverse datasets not seen during training. We evaluate our pre-trained model against established statistical, machine learning, and deep learning methods, demonstrating that TimeGPT zero-shot inference excels in performance, efficiency, and simplicity. Our study provides compelling evidence that insights from other domains of artificial intelligence can be effectively applied to time series analysis. We conclude that large-scale time series models offer an exciting opportunity to democratize access to precise predictions and reduce uncertainty by leveraging the capabilities of contemporary advancements in deep learning."
+run: release
+	./main $(TEXT)

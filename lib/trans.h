@@ -17,9 +17,7 @@ typedef struct {
   char *tl; // target language
 } TransParams;
 
-// Function to perform translation request using Google Translate API
-void request_api(Text *output, const char *url);
-void genarate_trans_url(char *url, const TransParams params, Text text);
+void genarate_trans_url(char *url, const TransParams params, Slice text);
 void parse_resp(char *parsed, const char *json_string);
 
 #endif
