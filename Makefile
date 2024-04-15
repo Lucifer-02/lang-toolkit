@@ -6,7 +6,7 @@ TEXT = "VBA, or Visual Basic for Applications in short, is a Microsoft computer 
 
 
 LINKLIBS +=	-lvlc -ljansson -lcurl -lpthread
-INCLUDED +=	./lib/tts.c ./lib/trans.c ./lib/common.c
+INCLUDED +=	./lib/tts.c ./lib/trans.c ./lib/common.c ./lib/player.c
 
 SOURCE = main
 SOURCE_CODE = $(SOURCE).c

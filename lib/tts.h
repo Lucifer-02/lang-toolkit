@@ -7,8 +7,6 @@
 
 #define TOTAL_AUDIO_BUFFER_SIZE 1048576 // 1Mb
 #define CHUNK_AUDIO_BUFFER_SIZE 65536   // 65Kb
-#define TOTAL_TEXT_BUFFER_SIZE 32768    // 33Kb
-#define CHUNK_TEXT_BUFFER_SIZE 1024     // 1Kb
 
 typedef struct {
   char *client;
@@ -16,11 +14,6 @@ typedef struct {
   char *tl; // output encode
 } TTSParams;
 
-typedef struct {
-  char *audio; // pointer to audio in memory
-  size_t size;
-  size_t pos; // for callback
-} MemAudioData;
 
 typedef struct {
   const char *url;

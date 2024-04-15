@@ -142,3 +142,46 @@ void request_api(Slice *output, const char *url) {
   assert(output->data != NULL);
   assert(output->size != 0);
 }
+void split_text(char *text, const int limit,
+                cvector_vector_type(Slice) * result) {
+  assert(text != NULL);
+
+  int text_len = strlen(text);
+  assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
+  assert(text_len != 0);
+
+  const Slice source = {.data = text, .size = text_len};
+
+  char *pointer = source.data + 0;
+  int remain_size = source.size - 0;
+
+  // split text to chunk then handle one by one if reach limit length
+  while (remain_size > 0) {
+
+    const Slice slice = tok(pointer, remain_size, limit);
+    cvector_push_back(*result, slice);
+    pointer = slice.data + slice.size + 1;
+    remain_size -= slice.size + 1;
+  }
+}
+
+void save_audio(MemAudioData audio, char *filename) {
+
+  FILE *fp = fopen(filename, "wb");
+  if (fp == NULL) {
+    printf("Error opening output file\n");
+    exit(1);
+  }
+  printf("Files opened, copying beginning.\n");
+  size_t bytes_written = fwrite(audio.audio, sizeof(char), audio.size, fp);
+  if (bytes_written != audio.size) {
+    perror("Error writing to file expect");
+    fclose(fp);
+    return;
+  }
+
+  printf("Write successful!\n");
+
+  // Close the files
+  fclose(fp);
+}
