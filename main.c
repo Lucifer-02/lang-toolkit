@@ -84,7 +84,7 @@ void *fetch_url(void *arg) {
 MemAudioData fast_tts(char *text, const int limit) {
   assert(text != NULL);
   int text_len = strlen(text);
-  assert(text_len < CHUNK_TEXT_BUFFER_SIZE);
+  assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
   assert(text_len != 0);
 
   TTSParams params = {.client = "tw-ob", .ie = "UTF-8", .tl = "vi"};
@@ -92,6 +92,7 @@ MemAudioData fast_tts(char *text, const int limit) {
   char data[TOTAL_AUDIO_BUFFER_SIZE];
   Slice audio = {.data = data, .size = 0};
 
+  printf("This 1\n");
   cvector_vector_type(Slice) text_chunks = NULL;
   split_text(text, limit, &text_chunks);
 
@@ -114,8 +115,10 @@ MemAudioData fast_tts(char *text, const int limit) {
     pthread_create(&threads[i], NULL, fetch_url, &thread_data[i]);
   }
 
+  printf("num chunks: %d\n", num_chunks);
   // Wait for threads to finish
   for (int i = 0; i < num_chunks; i++) {
+    printf("This 4 %d\n", i);
     pthread_join(threads[i], NULL);
   }
 
@@ -141,11 +144,11 @@ MemAudioData fast_tts(char *text, const int limit) {
 int main(int argc, char *argv[]) {
   if (argc < 3) {
     printf("Please run with arguments: ./main <speed> <mode> <text>\n");
-    printf("\tModes: 0 - translation -> text-to-speech -> play audio\n");
-    printf("\tModes: 1 - translation -> text-to-speech\n");
-    printf("\tModes: 2 - text-to-speech\n");
-    printf("\tModes: 3 - text-to-speech -> play_audio\n");
-    printf("\tModes: 4 - translation\n");
+    printf("\tMode 0 - translation -> text-to-speech -> play audio\n");
+    printf("\tMode 1 - translation -> text-to-speech\n");
+    printf("\tMode 2 - text-to-speech\n");
+    printf("\tMode 3 - text-to-speech -> play_audio\n");
+    printf("\tMode 4 - translation\n");
     exit(0);
   }
 
@@ -162,7 +165,7 @@ int main(int argc, char *argv[]) {
   }
   if (mode == 1) {
     char translation[TRANS_BUFFER_SIZE];
-    trans(translation, argv[2]);
+    trans(translation, argv[3]);
     MemAudioData audio = fast_tts(translation, TEXT_LIMIT);
     fwrite(audio.audio, 1, audio.size, stdout);
   }
