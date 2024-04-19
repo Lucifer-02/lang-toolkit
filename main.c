@@ -81,7 +81,7 @@ void *fetch_url(void *arg) {
   return NULL;
 }
 
-MemAudioData fast_tts(const char *text, const int limit) {
+MemAudioData fast_tts(char *text, const int limit) {
   assert(text != NULL);
   int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 
   const float speed = atof(argv[1]);
   const int mode = atoi(argv[2]);
-  char* text = argv[3];
+  char *text = argv[3];
 
   if (mode == 0) {
     char translation[TRANS_BUFFER_SIZE];
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
     // play_audio(audio, speed);
   }
   if (mode == 4) {
-	char translation[TRANS_BUFFER_SIZE];
+    char translation[TRANS_BUFFER_SIZE];
     trans(translation, text);
     fwrite(translation, 1, strlen(translation), stdout);
   }
