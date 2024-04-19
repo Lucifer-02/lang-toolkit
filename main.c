@@ -8,7 +8,7 @@
 #include "lib/common.h"
 #include "lib/cvector.h"
 #include "lib/cvector_utils.h"
-#include "lib/player.h"
+// #include "lib/player.h"
 #include "lib/trans.h"
 #include "lib/tts.h"
 
@@ -81,7 +81,7 @@ void *fetch_url(void *arg) {
   return NULL;
 }
 
-MemAudioData fast_tts(char *text, const int limit) {
+MemAudioData fast_tts(const char *text, const int limit) {
   assert(text != NULL);
   int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
@@ -92,7 +92,7 @@ MemAudioData fast_tts(char *text, const int limit) {
   char data[TOTAL_AUDIO_BUFFER_SIZE];
   Slice audio = {.data = data, .size = 0};
 
-  printf("This 1\n");
+  // printf("This 1\n");
   cvector_vector_type(Slice) text_chunks = NULL;
   split_text(text, limit, &text_chunks);
 
@@ -115,10 +115,10 @@ MemAudioData fast_tts(char *text, const int limit) {
     pthread_create(&threads[i], NULL, fetch_url, &thread_data[i]);
   }
 
-  printf("num chunks: %d\n", num_chunks);
+  // printf("num chunks: %d\n", num_chunks);
   // Wait for threads to finish
   for (int i = 0; i < num_chunks; i++) {
-    printf("This 4 %d\n", i);
+    // printf("This 4 %d\n", i);
     pthread_join(threads[i], NULL);
   }
 
@@ -155,31 +155,32 @@ int main(int argc, char *argv[]) {
   const int TEXT_LIMIT = 250;
 
   const float speed = atof(argv[1]);
-  const uint8_t mode = atoi(argv[2]);
+  const int mode = atoi(argv[2]);
+  char* text = argv[3];
 
   if (mode == 0) {
     char translation[TRANS_BUFFER_SIZE];
-    trans(translation, argv[3]);
+    trans(translation, text);
     MemAudioData audio = fast_tts(translation, TEXT_LIMIT);
-    play_audio(audio, speed);
+    // play_audio(audio, speed);
   }
   if (mode == 1) {
     char translation[TRANS_BUFFER_SIZE];
-    trans(translation, argv[3]);
+    trans(translation, text);
     MemAudioData audio = fast_tts(translation, TEXT_LIMIT);
     fwrite(audio.audio, 1, audio.size, stdout);
   }
   if (mode == 2) {
-    MemAudioData audio = fast_tts(argv[3], TEXT_LIMIT);
+    MemAudioData audio = fast_tts(text, TEXT_LIMIT);
     fwrite(audio.audio, 1, audio.size, stdout);
   }
   if (mode == 3) {
-    MemAudioData audio = fast_tts(argv[3], TEXT_LIMIT);
-    play_audio(audio, speed);
+    MemAudioData audio = fast_tts(text, TEXT_LIMIT);
+    // play_audio(audio, speed);
   }
   if (mode == 4) {
-    char translation[TRANS_BUFFER_SIZE];
-    trans(translation, argv[2]);
+	char translation[TRANS_BUFFER_SIZE];
+    trans(translation, text);
     fwrite(translation, 1, strlen(translation), stdout);
   }
 
