@@ -6,7 +6,7 @@ WARNING += -Wall -Wextra
 # TEXT = "hi"
 TEXT = "Thập kỷ vừa qua đã chứng kiến sự bùng nổ mối quan tâm nghiên cứu và giáo dục về suy luận nhân quả, nhờ những ứng dụng rộng rãi của nó trong nghiên cứu y sinh, khoa học xã hội, trí tuệ nhân tạo, v.v. Cuốn sách giáo khoa này, dựa trên khóa học của tác giả về suy luận nhân quả tại UC Berkeley, đã được giảng dạy trên bảy năm qua, chỉ yêu cầu kiến thức cơ bản về lý thuyết xác suất, suy luận thống kê và hồi quy tuyến tính và logistic. Nó giả định kiến thức tối thiểu về suy luận nhân quả và xem xét xác suất và thống kê cơ bản trong phần phụ lục. Nó bao gồm suy luận nhân quả từ góc độ thống kê và bao gồm các ví dụ và ứng dụng từ thống kê sinh học và kinh tế lượng."
 
-LINKLIBS +=	-lvlc -ljansson -lcurl -lpthread
+LINKLIBS +=	-lvlc -ljansson -lcurl -lpthread -fopenmp
 #LINKLIBS +=	-ljansson -lcurl -lpthread
 INCLUDED +=	./lib/tts.c ./lib/trans.c ./lib/common.c ./lib/player.c
 #INCLUDED +=	./lib/tts.c ./lib/trans.c ./lib/common.c 
@@ -33,3 +33,8 @@ run: debug
 test:
 	./main $(SPEED) $(MODE) $(TEXT)
 	
+test-thread:
+	./thread $(SPEED) $(MODE) $(TEXT)
+
+test-omp:
+	./omp $(SPEED) $(MODE) $(TEXT)

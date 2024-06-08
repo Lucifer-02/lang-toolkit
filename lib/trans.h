@@ -19,5 +19,6 @@ typedef struct {
 
 void genarate_trans_url(char *url, const TransParams params, Slice text);
 void parse_resp(char *parsed, const char *json_string);
+void trans(char *translation, char text[]);
 
 #endif

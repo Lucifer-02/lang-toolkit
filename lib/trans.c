@@ -43,3 +43,25 @@ void parse_resp(char *parsed, const char *json_string) {
   parsed[offset] = '\0';
   json_decref(root);
 }
+
+void trans(char *translation, char text[]) {
+  assert(strlen(text) < TRANS_BUFFER_SIZE); //@require enough memory
+
+  char url[TRANS_BUFFER_SIZE];
+  const Slice source = {.data = text, .size = strlen(text)};
+  const TransParams params = {.client = "gtx",
+                        .ie = "UTF-8",
+                        .oe = "UTF-8",
+                        .dt = "t",
+                        .sl = "auto",
+                        .tl = "vi"};
+
+  genarate_trans_url(url, params, source);
+  // printf("url: %s\n", url);
+
+  char data[TRANS_BUFFER_SIZE];
+  Slice trans = {.data = data, .size = 0};
+  request_api(&trans, url);
+  // printf("Output: %s, size: %ld\n", trans.data, trans.size);
+  parse_resp(translation, trans.data);
+}
