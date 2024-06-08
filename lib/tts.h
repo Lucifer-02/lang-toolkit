@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-#define TOTAL_AUDIO_BUFFER_SIZE 1048576 // 1Mb
-#define CHUNK_AUDIO_BUFFER_SIZE 65536   // 65Kb
+#define TOTAL_AUDIO_BUFFER_SIZE 4194304 // 4Mb
+#define CHUNK_AUDIO_BUFFER_SIZE 131072   // 131Kb
 
 typedef struct {
   char *client;

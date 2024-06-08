@@ -8,7 +8,7 @@
 #include "lib/common.h"
 #include "lib/cvector.h"
 #include "lib/cvector_utils.h"
-// #include "lib/player.h"
+#include "lib/player.h"
 #include "lib/trans.h"
 #include "lib/tts.h"
 
@@ -53,7 +53,7 @@ MemAudioData tts(char *text, const int limit) {
   while (size > 0) {
 
     const Slice slice = tok(pointer, size, limit);
-    // fwrite(slice.data, 1, slice.size, stdout);
+    fwrite(slice.data, 1, slice.size, stdout);
     // printf("\n");
     // printf("\nlen: %d\n", slice.size);
     genarate_tts_url(url, params, slice);
@@ -78,6 +78,12 @@ void *fetch_url(void *arg) {
   thread_data_t *data = (thread_data_t *)arg;
   // printf("URL: %s\n", data->url);
   request_api(&(data->response), data->url);
+
+  // display response data and size for debug
+  // printf("Response: %s\n", data->response.data);
+  // printf("Size: %d\n", data->response.size);
+
+  assert(data->response.size > 0);
   return NULL;
 }
 
@@ -92,7 +98,6 @@ MemAudioData fast_tts(char *text, const int limit) {
   char data[TOTAL_AUDIO_BUFFER_SIZE];
   Slice audio = {.data = data, .size = 0};
 
-  // printf("This 1\n");
   cvector_vector_type(Slice) text_chunks = NULL;
   split_text(text, limit, &text_chunks);
 
@@ -115,13 +120,16 @@ MemAudioData fast_tts(char *text, const int limit) {
     pthread_create(&threads[i], NULL, fetch_url, &thread_data[i]);
   }
 
-  // printf("num chunks: %d\n", num_chunks);
-  // Wait for threads to finish
   for (int i = 0; i < num_chunks; i++) {
-    // printf("This 4 %d\n", i);
-    pthread_join(threads[i], NULL);
+    if ((void *)threads[i] == NULL) {
+      printf("Thread %d was not created successfully.\n", i);
+      continue;
+    }
+    int pthread_result = pthread_join(threads[i], NULL);
+    if (pthread_result != 0) {
+      printf("Error joining thread %d. Error code: %d\n", i, pthread_result);
+    }
   }
-
   // Combine responses
   for (int i = 0; i < num_chunks; i++) {
     // printf("Size: %d\n", thread_data[i].response.size);
@@ -144,11 +152,11 @@ MemAudioData fast_tts(char *text, const int limit) {
 int main(int argc, char *argv[]) {
   if (argc < 3) {
     printf("Please run with arguments: ./main <speed> <mode> <text>\n");
-    printf("\tMode 0 - translation -> text-to-speech -> play audio\n");
-    printf("\tMode 1 - translation -> text-to-speech\n");
-    printf("\tMode 2 - text-to-speech\n");
+    printf("\tMode 0 - translation -> text-to-speech -> play-audio\n");
+    printf("\tMode 1 - translation -> text-to-speech -> stdout\n");
+    printf("\tMode 2 - text-to-speech -> stdout\n");
     printf("\tMode 3 - text-to-speech -> play_audio\n");
-    printf("\tMode 4 - translation\n");
+    printf("\tMode 4 - translation -> stdout\n");
     exit(0);
   }
 
@@ -162,7 +170,7 @@ int main(int argc, char *argv[]) {
     char translation[TRANS_BUFFER_SIZE];
     trans(translation, text);
     MemAudioData audio = fast_tts(translation, TEXT_LIMIT);
-    // play_audio(audio, speed);
+    play_audio(audio, speed);
   }
   if (mode == 1) {
     char translation[TRANS_BUFFER_SIZE];
@@ -173,10 +181,11 @@ int main(int argc, char *argv[]) {
   if (mode == 2) {
     MemAudioData audio = fast_tts(text, TEXT_LIMIT);
     fwrite(audio.audio, 1, audio.size, stdout);
+    //
   }
   if (mode == 3) {
     MemAudioData audio = fast_tts(text, TEXT_LIMIT);
-    // play_audio(audio, speed);
+    play_audio(audio, speed);
   }
   if (mode == 4) {
     char translation[TRANS_BUFFER_SIZE];

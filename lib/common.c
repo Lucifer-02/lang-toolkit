@@ -115,7 +115,9 @@ static size_t write_data(const void *ptr, size_t size, size_t nmemb,
   assert(resp->data != NULL);
 
   size_t new_size = resp->size + size * nmemb;
-  memmove(resp->data + resp->size, ptr, size * nmemb);
+  // memmove(resp->data + resp->size, ptr, size * nmemb);
+  // printf("Using memcpy, size: %ld\n", size);
+  memcpy(resp->data + resp->size, ptr, size * nmemb);
   resp->size = new_size;
   resp->data[resp->size] = '\0';
   return size * nmemb;
@@ -128,10 +130,12 @@ void request_api(Slice *output, const char *url) {
 
   CURL *curl = curl_easy_init();
   if (curl) {
+    // curl_easy_setopt(curl, CURLOPT_URL, curl_easy_escape(curl, url, 0));
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output);
     CURLcode res = curl_easy_perform(curl);
+    // printf("Response: %d\n", res);
     if (res != CURLE_OK) {
       fprintf(stderr, "curl_easy_perform() failed: %s\n",
               curl_easy_strerror(res));
@@ -140,7 +144,7 @@ void request_api(Slice *output, const char *url) {
   }
 
   assert(output->data != NULL);
-  assert(output->size != 0);
+  assert(output->size > 0);
 }
 void split_text(char *text, const int limit,
                 cvector_vector_type(Slice) * result) {
@@ -157,12 +161,16 @@ void split_text(char *text, const int limit,
 
   // split text to chunk then handle one by one if reach limit length
   while (remain_size > 0) {
-
     const Slice slice = tok(pointer, remain_size, limit);
+    // print_slice(slice);
     cvector_push_back(*result, slice);
     pointer = slice.data + slice.size + 1;
     remain_size -= slice.size + 1;
   }
+}
+
+void print_slice(Slice slice) {
+  printf("Text: %.*s, length: %d\n", slice.size, slice.data, slice.size);
 }
 
 void save_audio(MemAudioData audio, char *filename) {

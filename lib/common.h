@@ -29,5 +29,6 @@ Slice tok(char *text, int len, int limit);
 void request_api(Slice *output, const char *url);
 void split_text(char *text, const int limit,
                 cvector_vector_type(Slice) * result);
+void print_slice(Slice slice);
 
 #endif
