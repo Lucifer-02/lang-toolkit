@@ -150,7 +150,7 @@ void split_text(char *text, const int limit,
                 cvector_vector_type(Slice) * result) {
   assert(text != NULL);
 
-  int text_len = strlen(text);
+  const int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
   assert(text_len != 0);
 
@@ -167,6 +167,10 @@ void split_text(char *text, const int limit,
     pointer = slice.data + slice.size + 1;
     remain_size -= slice.size + 1;
   }
+
+  // printf("Number of slice: %ld, rate: %d\n", cvector_size(*result),
+  // ((text_len / limit) + 1) * 2);
+  assert(cvector_size(*result) < ((text_len / limit) + 1) * 2);
 }
 
 void print_slice(Slice slice) {

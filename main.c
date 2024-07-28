@@ -1,12 +1,11 @@
-#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "lib/common.h"
 #include "lib/cvector.h"
 #include "lib/cvector_utils.h"
+
+#include "lib/common.h"
 #include "lib/player.h"
 #include "lib/trans.h"
 #include "lib/tts.h"
@@ -41,8 +40,14 @@ int main(int argc, char *argv[]) {
     exit(0);
   }
   if (mode == 2) {
-    MemAudioData audio = fast_tts_omp(text);
-    fwrite(audio.audio, 1, audio.size, stdout);
+    printf("text: %s\n", text);
+    printf("mode: %d\n", mode);
+    printf("speed: %ld\n", speed);
+
+    MemAudioData audio = tts("hello");
+    // printf("%ld\n", audio.size);
+  //  fwrite(audio.audio, 1, audio.size, stdout);
+    printf("This 3\n");
     exit(0);
   }
   if (mode == 3) {

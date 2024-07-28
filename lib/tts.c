@@ -23,6 +23,8 @@ void genarate_tts_url(char *url, const TTSParams params, Slice text) {
 }
 
 MemAudioData tts(char *text) {
+  // assert(false);
+  printf("This 1\n");
   assert(text != NULL);
   int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
@@ -79,6 +81,8 @@ void *fetch_url(void *arg) {
 }
 
 MemAudioData fast_tts(char *text) {
+    printf("This 1\n");
+
   assert(text != NULL);
   int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);
@@ -143,6 +147,8 @@ MemAudioData fast_tts(char *text) {
 }
 
 MemAudioData fast_tts_omp(char *text) {
+    printf("This 1\n");
+
   assert(text != NULL);
   int text_len = strlen(text);
   assert(text_len < TOTAL_TEXT_BUFFER_SIZE);

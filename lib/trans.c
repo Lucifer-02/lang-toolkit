@@ -20,6 +20,7 @@ void genarate_trans_url(char *url, const TransParams params, Slice text) {
 
   int len = strlen(url);
   url_encode(text, url + len);
+  // printf("url: %s\n", url);
 }
 
 void parse_resp(char *parsed, const char *json_string) {
@@ -37,6 +38,7 @@ void parse_resp(char *parsed, const char *json_string) {
     const char *paragaph = json_string_value(chunk);
     size_t para_size = json_string_length(chunk);
     memcpy(parsed + offset, paragaph, para_size);
+    printf("paragaph: %s\n", paragaph);
     offset += para_size;
   }
 
@@ -50,11 +52,11 @@ void trans(char *translation, char text[]) {
   char url[TRANS_BUFFER_SIZE];
   const Slice source = {.data = text, .size = strlen(text)};
   const TransParams params = {.client = "gtx",
-                        .ie = "UTF-8",
-                        .oe = "UTF-8",
-                        .dt = "t",
-                        .sl = "auto",
-                        .tl = "vi"};
+                              .ie = "UTF-8",
+                              .oe = "UTF-8",
+                              .dt = "t",
+                              .sl = "auto",
+                              .tl = "vi"};
 
   genarate_trans_url(url, params, source);
   // printf("url: %s\n", url);
